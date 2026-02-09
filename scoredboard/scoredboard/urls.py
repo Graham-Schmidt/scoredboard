@@ -22,4 +22,5 @@ from .views import display_board, home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',  home),
+    path('display/', display_board),
 ]
