@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>control the game {{code}}</h1>
+
+<span class="current_score">Current score: A - {{scores.team_a_score}} B - {{scores.team_b_score}}</span>
+
+<div class="control_form">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+    <input type="submit" value="Submit">
+</form>
+</div>
+{% endblock %}

@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import display_board, home
+from .views import display_board, home, create_game, control_board
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',  home),
-    path('display/', display_board),
+    path('',  create_game),
+    path('game/<str:code>/display/', display_board, name="game_display"),
+    path('game/<str:code>/control/', control_board, name="game_control"),
 ]
