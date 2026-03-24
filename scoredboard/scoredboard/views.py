@@ -49,4 +49,4 @@ def create_game(request):
     else:
         form = CreateGameForm()
     
-    return render(request, 'home.html', {'form': form})
+    return render(request, 'create-game.html', {'form': form})
