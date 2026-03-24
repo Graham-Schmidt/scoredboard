@@ -3,10 +3,22 @@
         <h1>{{game}}</h1>
     </div>
     <div class="team_a_score_box">
-        <span class="team_a_score">{{game.team_a_score}}</span>
+        <span id="team_a_score" class="team_a_score">{{game.team_a_score}}</span>
     </div>
     <span>-</span>
     <div class="team_b_score_box">
-        <span class="team_b_score">{{game.team_b_score}}</span>
+        <span id="team_b_score" class="team_b_score">{{game.team_b_score}}</span>
     </div>
 </div>
+
+<script>
+    const scoreUrl = "{% url 'game_score' code %}";
+    setInterval(() => {
+        fetch(scoreUrl)
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('team_a_score').textContent = data.team_a_score;
+                document.getElementById('team_b_score').textContent = data.team_b_score;
+            });
+    }, 2000);
+</script>

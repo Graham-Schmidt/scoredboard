@@ -3,7 +3,7 @@ import string
 from datetime import timezone, timedelta
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.utils import timezone
 
@@ -36,6 +36,10 @@ def control_board(request, code):
         form = ControlBoardForm(instance=game)
     
     return render(request, 'control.html', {'form': form, 'code': code})
+
+def game_score(request, code):
+    game = Game.objects.get(code=code)
+    return JsonResponse({'team_a_score': game.team_a_score, 'team_b_score': game.team_b_score})
 
 def create_game(request):
     if request.method == 'POST':
