@@ -26,16 +26,14 @@ def display_board(request, code):
     return HttpResponse(template.render({"code": code, "game": game}, request))
 
 def control_board(request, code):
+    game = Game.objects.get(code=code)
     if request.method == 'POST':
-        form = ControlBoardForm(request.POST)
+        form = ControlBoardForm(request.POST, instance=game)
         if form.is_valid():
-            game_to_update = Game.objects.get(code=code)
-            game_to_update.team_a_score = request.POST.get('team_a_score')
-            game_to_update.team_b_score = request.POST.get('team_b_score')
-            game_to_update.save()
+            form.save()
             return redirect('game_control', code=code)
     else:
-        form = ControlBoardForm()
+        form = ControlBoardForm(instance=game)
     
     return render(request, 'control.html', {'form': form, 'code': code})
 

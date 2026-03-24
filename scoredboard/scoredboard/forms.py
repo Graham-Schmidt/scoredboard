@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Game, BoardControl
+from .models import Game
 
 class CreateGameForm(forms.ModelForm):
    class Meta:

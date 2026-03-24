@@ -15,6 +15,3 @@ class Game(models.Model):
     def __str__(self):
         return f"{self.team_a_name} vs {self.team_b_name} ({self.code})"
     
-class BoardControl(models.Model):
-    team_a_score = models.IntegerField(null=True)
-    team_b_score = models.IntegerField(null=True)
