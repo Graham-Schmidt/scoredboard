@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import display_board, home, create_game, control_board
+from .views import display_board, home, create_game, control_board, game_score
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('game/create/',  create_game),
     path('game/<str:code>/display/', display_board, name="game_display"),
     path('game/<str:code>/control/', control_board, name="game_control"),
+    path('game/<str:code>/score/', game_score, name="game_score"),
 ]
