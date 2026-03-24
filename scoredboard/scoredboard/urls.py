@@ -21,7 +21,8 @@ from .views import display_board, home, create_game, control_board
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',  create_game),
+    # TODO homepage
+    path('game/create/',  create_game),
     path('game/<str:code>/display/', display_board, name="game_display"),
     path('game/<str:code>/control/', control_board, name="game_control"),
 ]
