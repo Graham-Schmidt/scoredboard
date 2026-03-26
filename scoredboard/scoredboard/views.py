@@ -35,11 +35,15 @@ def control_board(request, code):
     else:
         form = ControlBoardForm(instance=game)
     
-    return render(request, 'control.html', {'form': form, 'code': code})
+    return render(request, 'control.html', {'form': form, 'code': code, 'game': game})
 
 def game_score(request, code):
     game = Game.objects.get(code=code)
     return JsonResponse({'team_a_score': game.team_a_score, 'team_b_score': game.team_b_score})
+
+def game_created(request, code):
+    game = Game.objects.get(code=code)
+    return render(request, 'game-created.html', {'game': game})
 
 def create_game(request):
     if request.method == 'POST':
@@ -49,8 +53,8 @@ def create_game(request):
             game.code = generate_code()
             game.expires_at = timezone.now() + timedelta(hours=4)
             game.save()
-            return redirect('game_display', code=game.code)
+            return redirect('game_created', code=game.code)
     else:
         form = CreateGameForm()
-    
+
     return render(request, 'create-game.html', {'form': form})
