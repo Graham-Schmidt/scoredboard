@@ -50,9 +50,12 @@ body {
 .card .subtitle {
     color: var(--text-muted);
     font-size: 0.9rem;
-    margin-top: -1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+h1 + .subtitle {
+    margin-top: -1rem;
 }
 
 /* ── Form ── */
