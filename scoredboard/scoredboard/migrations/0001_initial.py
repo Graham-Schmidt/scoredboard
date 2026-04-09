@@ -7,22 +7,29 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Game',
+            name="Game",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=6, unique=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('expires_at', models.DateTimeField()),
-                ('team_a_name', models.CharField(max_length=100)),
-                ('team_b_name', models.CharField(max_length=100)),
-                ('team_a_score', models.IntegerField(default=0)),
-                ('team_b_score', models.IntegerField(default=0)),
-                ('is_active', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("code", models.CharField(max_length=6, unique=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("expires_at", models.DateTimeField()),
+                ("team_a_name", models.CharField(max_length=100)),
+                ("team_b_name", models.CharField(max_length=100)),
+                ("team_a_score", models.IntegerField(default=0)),
+                ("team_b_score", models.IntegerField(default=0)),
+                ("is_active", models.BooleanField(default=True)),
             ],
         ),
     ]

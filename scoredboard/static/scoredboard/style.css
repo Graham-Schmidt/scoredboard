@@ -16,15 +16,24 @@
     padding: 0;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     background: var(--bg);
     color: var(--text);
     font-family: system-ui, -apple-system, sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1.5rem 1rem;
+}
+
+body.board {
+    padding: 0;
 }
 
 /* ── Card ── */
@@ -40,6 +49,30 @@ body {
     gap: 1.5rem;
 }
 
+.card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
 .card h1 {
     font-size: 1.6rem;
     font-weight: 900;
@@ -52,10 +85,6 @@ body {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-}
-
-h1 + .subtitle {
-    margin-top: -1rem;
 }
 
 /* ── Form ── */
@@ -129,12 +158,115 @@ h1 + .subtitle {
     color: #111111;
 }
 
+/* ── Update Button States ── */
+@keyframes pending-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 196, 0, 0); }
+    50%       { box-shadow: 0 0 0 5px rgba(245, 196, 0, 0.2); }
+}
+
+.btn-update {
+    background: var(--surface-raised);
+    border-color: var(--border);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-update.btn-dirty {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #111111;
+    cursor: pointer;
+    animation: pending-pulse 1.8s ease-in-out infinite;
+}
+
+.btn-update.btn-dirty:hover {
+    background: #ddb000;
+    border-color: #ddb000;
+}
+
+/* ── Increment Buttons (Control Page) ── */
+
+.increment-buttons {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.increment-buttons form {
+    flex: 1;
+}
+
+.btn-increment {
+    background: var(--surface-raised);
+    border: 2px solid var(--border);
+    font-size: 0.85rem;
+    font-weight: 800;
+    min-height: 48px;
+}
+
+.btn-increment:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ── Collapsible ── */
+.collapsible {
+    border: 1px solid var(--accent);
+}
+
+.collapsible summary {
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    padding: 0.85rem 1rem;
+    list-style: none;
+    user-select: none;
+}
+
+.collapsible summary::-webkit-details-marker { display: none; }
+
+.collapsible summary::after {
+    content: ' ›';
+    color: var(--accent);
+}
+
+.collapsible[open] summary::after {
+    content: ' ↓';
+}
+
+.collapsible-body {
+    border-top: 1px solid var(--border);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sport-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: 0.5rem;
+}
+
 /* ── Game Created ── */
+.qr-code {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    image-rendering: pixelated;
+}
+
+
 .game-code {
     text-align: center;
-    font-size: 3.5rem;
+    font-size: clamp(1.8rem, 8vw, 3.5rem);
     font-weight: 900;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.15em;
     color: var(--accent);
     font-variant-numeric: tabular-nums;
     border: 2px solid var(--border);
@@ -149,14 +281,8 @@ h1 + .subtitle {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-top: -1.2rem;
 }
 
-.action-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
 
 /* ── Display Board ── */
 .board-page {
@@ -165,11 +291,8 @@ h1 + .subtitle {
     align-items: center;
     justify-content: center;
     gap: 2.5rem;
-    min-height: 100vh;
+    min-height: 100dvh;
     width: 100%;
-    /* Override body padding so the scoreboard can breathe on its own terms */
-    margin: -1.5rem -1rem;
-    padding: 1.5rem 1rem;
 }
 
 .board-code {
@@ -194,7 +317,8 @@ h1 + .subtitle {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex: 1;
+    flex: 1 1 0%;
+    min-width: 0;
     padding: clamp(1.5rem, 4vh, 4rem) clamp(1rem, 3vw, 3rem);
     min-height: clamp(10rem, 35vh, 25rem);
 }
@@ -204,8 +328,8 @@ h1 + .subtitle {
 }
 
 .team-name {
-    color: var(--text-muted);
-    font-size: clamp(0.75rem, 2vw, 1.1rem);
+    color: var(--accent);
+    font-size: clamp(1rem, 3vw, 1.6rem);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -220,4 +344,62 @@ h1 + .subtitle {
     /* Fixed character width — 3 digits won't push wider than 2 */
     width: 3ch;
     text-align: center;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    body:not(.board) {
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .card {
+        max-width: 100%;
+        min-height: 100dvh;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        padding: 2.5rem 1.5rem 2.5rem;
+    }
+
+    .card form {
+        display: contents;
+    }
+
+    .card-fields {
+        gap: 1.5rem;
+        flex: 1;
+    }
+
+    .card-actions {
+        margin-top: auto;
+        padding-top: 1.5rem;
+    }
+
+    .field input[type="text"],
+    .field input[type="number"] {
+        padding: 1.1rem 1rem;
+        font-size: 1.25rem;
+    }
+
+    .btn {
+        min-height: 56px;
+        font-size: 1rem;
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qr-code {
+        max-width: 160px;
+    }
+
+    .scoreboard {
+        width: 95vw;
+    }
+
+    .team-name {
+        font-size: clamp(0.75rem, 4vw, 1rem);
+    }
 }

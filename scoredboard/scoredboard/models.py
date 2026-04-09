@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 
+
 class Game(models.Model):
     code = models.CharField(max_length=6, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,4 +15,3 @@ class Game(models.Model):
 
     def __str__(self):
         return f"{self.team_a_name} vs {self.team_b_name} ({self.code})"
-    
