@@ -1,12 +1,29 @@
-<div class="board">
-    <div class="game_code">
-        <h1>{{game}}</h1>
-    </div>
-    <div class="team_a_score_box">
-        <span class="team_a_score">{{game.team_a_score}}</span>
-    </div>
-    <span>-</span>
-    <div class="team_b_score_box">
-        <span class="team_b_score">{{game.team_b_score}}</span>
+{% extends 'base.html' %}
+{% block title_tag %}{{ game.team_a_name }} vs {{ game.team_b_name }} — Scoredboard{% endblock %}
+{% block body_class %}board{% endblock %}
+{% block body %}
+<div class="board-page">
+    <p class="board-code">{{ game.code }}</p>
+    <div class="scoreboard">
+        <div class="team-block">
+            <span class="team-name">{{ game.team_a_name }}</span>
+            <span id="team_a_score" class="team-score">{{ game.team_a_score }}</span>
+        </div>
+        <div class="team-block">
+            <span class="team-name">{{ game.team_b_name }}</span>
+            <span id="team_b_score" class="team-score">{{ game.team_b_score }}</span>
+        </div>
     </div>
 </div>
+
+<script>
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const ws = new WebSocket(`${protocol}//${window.location.host}/ws/game/{{ code }}/`);
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        document.getElementById('team_a_score').textContent = data.team_a_score;
+        document.getElementById('team_b_score').textContent = data.team_b_score;
+    };
+</script>
+{% endblock %}

@@ -1,14 +1,103 @@
 {% extends 'base.html' %}
+{% block title_tag %}Control — {{ code }}{% endblock %}
 {% block body %}
-<h1>control the game {{code}}</h1>
+<div class="card">
+    <div class="card-header">
+        <h1>Score Control</h1>
+        <p class="subtitle">Game {{ code }}</p>
+    </div>
 
-<span class="current_score">Current score: A - {{scores.team_a_score}} B - {{scores.team_b_score}}</span>
-
-<div class="control_form">
-    <form action="" method="post">
+    <form method="post" id="update-form">
         {% csrf_token %}
-        {{ form }}
-    <input type="submit" value="Submit">
-</form>
+        <input type="hidden" name="action" value="update">
+        <div class="card-fields">
+            <div class="field">
+                <label for="id_team_a_score">{{ game.team_a_name }}</label>
+                <input type="number" name="team_a_score" id="id_team_a_score"
+                       value="{{ game.team_a_score }}" placeholder="0">
+                {% if sport %}
+                <div class="increment-buttons">
+                    {% for inc in sport.increments %}
+                    <button type="button" class="btn btn-increment"
+                            data-team="a" data-value="{{ inc.value }}">{{ inc.label }}</button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="field">
+                <label for="id_team_b_score">{{ game.team_b_name }}</label>
+                <input type="number" name="team_b_score" id="id_team_b_score"
+                       value="{{ game.team_b_score }}" placeholder="0">
+                {% if sport %}
+                <div class="increment-buttons">
+                    {% for inc in sport.increments %}
+                    <button type="button" class="btn btn-increment"
+                            data-team="b" data-value="{{ inc.value }}">{{ inc.label }}</button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-actions">
+            <button type="submit" class="btn btn-update" id="update-btn" disabled>Update Score</button>
+        </div>
+    </form>
+
+    <details class="collapsible" {% if sport %}open{% endif %}>
+        <summary>{% if sport %}Sport Mode: {{ sport.name }}{% else %}Sport Mode{% endif %}</summary>
+        <div class="collapsible-body">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="set_sport">
+                <div class="sport-grid">
+                    {% for s in sports %}
+                    <button type="submit" name="sport" value="{{ s.slug }}"
+                        class="btn {% if sport.slug == s.slug %}btn-primary{% endif %}">
+                        {{ s.name }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    </details>
 </div>
+
+<script>
+    const inputA   = document.getElementById('id_team_a_score');
+    const inputB   = document.getElementById('id_team_b_score');
+    const btnUpdate = document.getElementById('update-btn');
+    const savedA = parseInt(inputA.value, 10);
+    const savedB = parseInt(inputB.value, 10);
+
+    function checkDirty() {
+        const dirty = parseInt(inputA.value, 10) !== savedA
+                   || parseInt(inputB.value, 10) !== savedB;
+        btnUpdate.disabled = !dirty;
+        btnUpdate.classList.toggle('btn-dirty', dirty);
+    }
+
+    document.querySelectorAll('.btn-increment').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = btn.dataset.team === 'a' ? inputA : inputB;
+            input.value = parseInt(input.value, 10) + parseInt(btn.dataset.value, 10);
+            checkDirty();
+        });
+    });
+
+    ['input', 'change', 'keyup'].forEach(evt => {
+        inputA.addEventListener(evt, checkDirty);
+        inputB.addEventListener(evt, checkDirty);
+    });
+
+    // Persist the user's open/closed choice across page reloads
+    const sportDetails = document.querySelector('.collapsible');
+    if (sportDetails) {
+        const stored = localStorage.getItem('sport-mode-open');
+        if (stored === 'closed') sportDetails.removeAttribute('open');
+        else if (stored === 'open') sportDetails.setAttribute('open', '');
+        sportDetails.addEventListener('toggle', () => {
+            localStorage.setItem('sport-mode-open', sportDetails.open ? 'open' : 'closed');
+        });
+    }
+</script>
 {% endblock %}

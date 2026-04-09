@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title_tag %}Scoredboard{% endblock %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <h1>Scoredboard</h1>
+        <p class="subtitle">Enter your team names to start a new game.</p>
+    </div>
+    <form method="post" action="{% url 'game_create' %}">
+        {% csrf_token %}
+        <div class="card-fields">
+            <div class="field">
+                <label for="id_team_a_name">Team A</label>
+                {{ form.team_a_name }}
+            </div>
+            <div class="field">
+                <label for="id_team_b_name">Team B</label>
+                {{ form.team_b_name }}
+            </div>
+        </div>
+        <div class="card-actions">
+            <button type="submit" class="btn btn-primary">Start Game</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title_tag %}Game Expired — Scoredboard{% endblock %}
+{% block body %}
+<div class="card">
+    <h1>Game Expired</h1>
+    <p class="subtitle">This game is no longer active.</p>
+    <div class="card-actions">
+        <a href="{% url 'game_create' %}" class="btn btn-primary">Start a New Game</a>
+    </div>
+</div>
+{% endblock %}
